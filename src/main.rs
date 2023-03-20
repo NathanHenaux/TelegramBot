@@ -1,3 +1,6 @@
+#![allow(unused_imports)]
+use std::fmt::format;
+
 use teloxide::{prelude::*, utils::command::BotCommands};
 
 #[tokio::main]
@@ -15,21 +18,47 @@ async fn main() {
 enum Command {
     #[command(description = "display this text.")]
     Help,
-    #[command(description = "handle a username.")]
-    Username(String),
-    #[command(description = "handle a username and an age.", parse_with = "split")]
-    UsernameAndAge { username: String, age: u8 },
+    #[command(description = "Number of sales for Wymmo.com.")]
+    SalesCount,
+    #[command(description = "Number of rentals for Wymmo.com.")]
+    RentalsCount,
 }
+
+struct Query;
+
+#[juniper::graphql_object]
+impl Query {
+    fn accurate_counters() -> Counters {
+        Counters {
+            sales: retrieve_sales_count(),
+            rentals: retrieve_rentals_count(),
+        }
+    }
+}
+
+#[derive(juniper::GraphQLObject)]
+struct Counters {
+    sales: i32,
+    rentals: i32,
+}
+
+fn retrieve_sales_count() -> i32 {
+    // get salesCount
+}
+
+fn retrieve_rentals_count() -> i32 {
+    // get rentalsCount
+}
+
 
 async fn answer(bot: Bot, msg: Message, cmd: Command) -> ResponseResult<()> {
     match cmd {
         Command::Help => bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?,
-        Command::Username(username) => {
-            bot.send_message(msg.chat.id, format!("Your username is @{username}.")).await?
+        Command::SalesCount => {
+            bot.send_message(msg.chat.id, format!("SalesCount: {}.", retrieve_sales_count())).await?
         }
-        Command::UsernameAndAge { username, age } => {
-            bot.send_message(msg.chat.id, format!("Your username is @{username} and age is {age}."))
-                .await?
+        Command::RentalsCount => {
+            bot.send_message(msg.chat.id, format!("RentalsCount: {}.", retrieve_rentals_count())).await?
         }
     };
 
