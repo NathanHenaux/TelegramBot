@@ -1,0 +1,626 @@
+schema {
+  query: QueryRoot
+  mutation: MutationRoot
+  subscription: SubscriptionRoot
+}
+
+type AccurateCounters {
+  sales(query: NaturalQueryString!): Size!
+  rentals(query: NaturalQueryString!): Size!
+}
+
+scalar AdDescription
+
+scalar AdTitle
+
+# Address of the building
+type Address {
+  buildingNumber: BuildingNumber
+  streetName: StreetName!
+  secondaryAdress: SecondaryAddress
+  zipCode: ZipCode!
+  cityName: CityName!
+  countryName: CountryName!
+}
+
+# less precise Address
+type AddressHint {
+  zipCode: ZipCode!
+  cityName: CityName!
+  countryName: CountryName!
+}
+
+# Adventurous Factor
+enum AdventurousFactor {
+  STRICT
+  RELAX
+  ADVENTUROUS
+  FUNKY
+}
+
+scalar AlurLawAnnualFees
+
+scalar BalconiesArea
+
+scalar BalconiesCount
+
+scalar BathroomsCount
+
+scalar BedroomsCount
+
+# Geo location point with blur effect
+type BlurryGeoPoint {
+  longitude: Longitude!
+  latitude: Latitude!
+  radius: BlurryRadius!
+}
+
+scalar BlurryRadius
+
+scalar BoxesCount
+
+scalar BrandNew
+
+scalar BuildingNumber
+
+# Building specifications
+type BuildingSpecs {
+  buildingType: BuildingType!
+  livingArea: LivingArea
+  roomsCount: RoomsCount
+  heating: HeatingSpecs!
+  energyAudit: EnergyAudit!
+  landArea: LandArea
+  bedsCount: BedroomsCount
+  bathsCount: BathroomsCount
+  showersCount: ShowerroomsCount
+  toiletsCount: ToiletsCount
+  balconiesCount: BalconiesCount
+  balconiesArea: BalconiesArea
+  floor: Floor
+  floorsCount: FloorsCount
+  builtYear: BuiltYear
+  kitchen: KitchenSpecs
+  brandNew: BrandNew
+  southOriented: SouthOriented
+  eastOriented: EastOriented
+  westOriented: WestOriented
+  northOriented: NorthOriented
+  elevator: Elevator
+  cellar: Cellar
+  parkingsCount: ParkingsCount
+  boxesCount: BoxesCount
+  digicode: Digicode
+  intercom: Intercom
+  caretaker: Caretaker
+  terrace: Terrace
+  swimmingPool: SwimmingPool
+  disabledAccomomodations: DisabledAccomomodations
+  fireplace: Fireplace
+  duplex: Duplex
+  isJointProperty: IsJointProperty
+  lotsCount: LotsCount
+}
+
+# Building types
+enum BuildingType {
+  HOUSE
+  APARTMENT
+  BUILDING
+  SHOP
+  CASTLE
+  UNKNOWN
+  OFFICE
+  MANSION
+  TENEMENT
+  WAREHOUSE
+  LOFT
+  PARKING
+  LAND
+  PROPERTY
+  BLUEPRINT
+}
+
+scalar BuiltYear
+
+scalar Caretaker
+
+scalar Cellar
+
+scalar CityName
+
+type CityView {
+  name: CityName!
+  zipCode: ZipCode!
+  sales(
+    query: NaturalQueryString!
+    size: Size! = 50
+    after: EsAfter
+  ): SaleViewConnection!
+  rentals(
+    query: NaturalQueryString!
+    size: Size! = 50
+    after: EsAfter
+  ): RentalViewConnection!
+  dvfs(size: Size! = 50, after: EsAfter): DvfDataConnection!
+  pricePoints(useless: Boolean! = true): [PricePoint!]!
+}
+
+type Contact {
+  phone: PhoneNumber
+  email: Email
+  name: ContactName
+}
+
+scalar ContactName
+
+scalar CountryName
+
+scalar Deposit
+
+scalar Digicode
+
+scalar DisabledAccomomodations
+
+scalar Duplex
+
+# DVF elastic search index
+type DvfData {
+  date: NaiveDate!
+  location: Location!
+  parcelId: ParcelId!
+  price: Price!
+  livingArea: LivingArea!
+  landArea: LandArea
+}
+
+type DvfDataConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DvfDataEdge!]!
+
+  # A list of nodes.
+  nodes: [DvfData!]!
+  totalCount: TotalItemsCount!
+}
+
+# An edge in a connection.
+type DvfDataEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: DvfData!
+}
+
+scalar EastOriented
+
+scalar Elevator
+
+scalar Email
+
+# Energy Audit (DPE / Diagnostic de performance energetique in french)
+type EnergyAudit {
+  ghgEmissions: GhgEmissions
+  ghgEmissionsAuditSummary: GhgEmissionsSummary
+  energyConsumption: EnergyConsumption
+  energyConsumptionSummary: EnergyConsumptionSummary
+}
+
+scalar EnergyConsumption
+
+# Energy consumption summary in
+enum EnergyConsumptionSummary {
+  A
+  B
+  C
+  D
+  E
+  F
+  G
+  NOT_SUBJECT
+  BLANK
+}
+
+scalar Equiped
+
+scalar EsAfter
+
+scalar ExclusiveMandate
+
+scalar FeesPercentage
+
+scalar Fireplace
+
+scalar Floor
+
+scalar FloorsCount
+
+# Geo location point
+type GeoPoint {
+  longitude: Longitude!
+  latitude: Latitude!
+}
+
+# Geo location point
+input GeoPointInput {
+  longitude: Longitude!
+  latitude: Latitude!
+}
+
+scalar GhgEmissions
+
+# Greenhouse gaz emissions summary
+enum GhgEmissionsSummary {
+  A
+  B
+  C
+  D
+  E
+  F
+  G
+  NOT_SUBJECT
+  BLANK
+}
+
+# Heater types
+enum HeaterType {
+  RADIATOR
+  UNDERFLOOR
+  CEILING
+  MIXED
+  FIREPLACE
+  UNKNOWN
+  REVERSIBLE_AIR_CONDITIONING
+}
+
+# Heating fuel
+enum HeatingFuel {
+  GAS
+  ELECTRICITY
+  FUEL
+  OIL
+  COAL
+  LIQUID_PETROLEUM_GAS
+  BIOMASS
+  WOOD
+}
+
+# Heating, Heaters specifications
+type HeatingSpecs {
+  heatingType: HeaterType!
+  fuel: HeatingFuel
+  sharing: SharedHeatingMode
+}
+
+scalar Intercom
+
+scalar IsJointProperty
+
+scalar JointPropertyFees
+
+# Kitchen specifications
+type KitchenSpecs {
+  kitchenType: KitchenType
+  equiped: Equiped
+}
+
+# Kitchen types
+enum KitchenType {
+  NONE
+  OPEN
+  SEPARATE
+  KITCHENETTE
+  INDUSTRIAL
+}
+
+scalar LandArea
+
+scalar Latitude
+
+scalar LegalProceedings
+
+scalar LivingArea
+
+scalar LivingPriceM2
+
+# properties location
+type Location {
+  geoPoint: GeoPoint
+  address: Address!
+  neighborhood: Neighborhood
+}
+
+# less precise location
+type LocationHint {
+  addressHint: AddressHint!
+  neighborhood: Neighborhood
+  blurryGeoPoint: BlurryGeoPoint
+}
+
+scalar Longitude
+
+scalar LotsCount
+
+# Medium specifications
+type Medium {
+  mediumType: MediumType!
+  url: MediumUrl!
+  alt: String
+}
+
+# Medium types
+enum MediumType {
+  PHOTO
+  VIDEO
+  OTHER
+}
+
+scalar MediumUrl
+
+type MutationRoot {
+  login(user: Username!, password: Password!): Boolean!
+  logout(useless: Boolean! = false): Boolean
+}
+
+# ISO 8601 calendar date without timezone.
+# Format: %Y-%m-%d
+#
+# # Examples
+#
+# * `1994-11-13`
+# * `2000-02-24`
+scalar NaiveDate
+
+scalar NaturalQueryString
+
+scalar Neighborhood
+
+scalar NetFees
+
+scalar NorthOriented
+
+# Information about pagination in a connection
+type PageInfo {
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+scalar ParcelId
+
+scalar ParkingsCount
+
+scalar Password
+
+scalar PhoneNumber
+
+scalar Price
+
+# price point
+type PricePoint {
+  date: NaiveDate!
+  avgPrice: LivingPriceM2!
+}
+
+scalar PropertyTax
+
+type QueryRoot {
+  sales(
+    query: NaturalQueryString!
+    size: Size! = 50
+    after: EsAfter
+  ): SaleViewConnection!
+  sale(user: Username!, id: SaleId!): SaleView
+  rentals(
+    query: NaturalQueryString!
+    size: Size! = 50
+    after: EsAfter
+  ): RentalViewConnection!
+  rental(user: Username!, id: RentalId!): RentalView
+  city(name: CityName!, zipCode: ZipCode!): CityView
+  zone(topLeft: GeoPointInput!, bottomRight: GeoPointInput!): ZoneView
+  accurateCounters(useless: Boolean! = false): AccurateCounters!
+}
+
+scalar Rent
+
+# Rental charges fees paiment modality
+enum RentalChargesFeesMode {
+  UNKNOWN
+  MONTHLY_FLAT_RATE
+  FORECASTING
+  ANNUAL
+}
+
+# Rental fees details
+type RentalFeesDetails {
+  chargesFeesMode: RentalChargesFeesMode!
+  agencyFeesUrl: Url
+}
+
+scalar RentalId
+
+# Rental rent details
+type RentalPriceDetails {
+  rent: Rent!
+  feesPart: NetFees!
+  deposit: Deposit
+  agencyFees: NetFees
+  inventoryFeesPart: NetFees
+}
+
+type RentalView {
+  id: RentalId!
+  title: AdTitle!
+  description: AdDescription!
+  priceDetails: RentalPriceDetails!
+  feesDetails: RentalFeesDetails!
+  specs: BuildingSpecs!
+  locationHint: LocationHint!
+  medias: [Medium!]!
+  contact: Contact
+  exclusiveMandate: ExclusiveMandate
+  city: CityView!
+  similars(
+    adventurousFactor: AdventurousFactor! = RELAX
+    size: Size! = 50
+    after: EsAfter
+  ): RentalViewConnection!
+}
+
+type RentalViewConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [RentalViewEdge!]!
+
+  # A list of nodes.
+  nodes: [RentalView!]!
+  totalCount: TotalItemsCount!
+}
+
+# An edge in a connection.
+type RentalViewEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: RentalView!
+}
+
+scalar RoomsCount
+
+# Sale fees details
+type SaleFeesDetails {
+  jointPropertyFees: JointPropertyFees
+  propertyTax: PropertyTax
+  annualFees: AlurLawAnnualFees
+  legalProceedings: LegalProceedings
+  legalProceedingsDetails: String
+  feesSharing: SaleFeesSharing
+  agencyFeesUrl: Url
+}
+
+# Fees sharing type
+enum SaleFeesSharing {
+  UNKNOWN
+  BUYER
+  SELLER
+  SHARED
+}
+
+scalar SaleId
+
+# Sale price details
+type SalePriceDetails {
+  price: Price
+  priceBuyerFeesFree: Price
+  fees: FeesPercentage
+}
+
+type SaleView {
+  id: SaleId!
+  title: AdTitle!
+  description: AdDescription!
+  priceDetails: SalePriceDetails!
+  feesDetails: SaleFeesDetails!
+  specs: BuildingSpecs!
+  locationHint: LocationHint!
+  medias: [Medium!]!
+  contact: Contact
+  exclusiveMandate: ExclusiveMandate
+  city: CityView!
+  similars(
+    adventurousFactor: AdventurousFactor! = RELAX
+    size: Size! = 50
+    after: EsAfter
+  ): SaleViewConnection!
+}
+
+type SaleViewConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [SaleViewEdge!]!
+
+  # A list of nodes.
+  nodes: [SaleView!]!
+  totalCount: TotalItemsCount!
+}
+
+# An edge in a connection.
+type SaleViewEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: SaleView!
+}
+
+scalar SecondaryAddress
+
+# Shared heating modes
+enum SharedHeatingMode {
+  LOCAL
+  CENTRAL
+  COLLECTIVE
+  INDIVIDUEL
+}
+
+scalar ShowerroomsCount
+
+scalar Size
+
+scalar SouthOriented
+
+scalar StreetName
+
+type SubscriptionRoot {
+  ping(payload: String!): String!
+}
+
+scalar SwimmingPool
+
+scalar Terrace
+
+scalar ToiletsCount
+
+scalar TotalItemsCount
+
+scalar Url
+
+scalar Username
+
+scalar WestOriented
+
+scalar ZipCode
+
+type ZoneView {
+  topLeft: GeoPoint!
+  bottomRight: GeoPoint!
+  sales(
+    query: NaturalQueryString!
+    size: Size! = 50
+    after: EsAfter
+  ): SaleViewConnection!
+  rentals(
+    query: NaturalQueryString!
+    size: Size! = 50
+    after: EsAfter
+  ): RentalViewConnection!
+  dvfs(size: Size! = 50, after: EsAfter): DvfDataConnection!
+  pricePoints(useless: Boolean! = true): [PricePoint!]!
+}

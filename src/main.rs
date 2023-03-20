@@ -3,6 +3,8 @@ use std::fmt::format;
 
 use teloxide::{prelude::*, utils::command::BotCommands};
 
+mod query;
+
 #[tokio::main]
 async fn main() {
     pretty_env_logger::init();
@@ -24,49 +26,16 @@ enum Command {
     RentalsCount,
 }
 
-struct Query;
-
-#[juniper::graphql_object]
-impl Query {
-    fn accurate_counters() -> Counters {
-        Counters {
-            sales: retrieve_sales_count(),
-            rentals: retrieve_rentals_count(),
-        }
-    }
-}
-
-#[derive(juniper::GraphQLObject)]
-struct Counters {
-    sales: i32,
-    rentals: i32,
-}
-
-fn retrieve_sales_count() -> i32 {
-    let query = r#"
-    query {
-        sales(query:"")
-        }
-    "#;
-}
-
-fn retrieve_rentals_count() -> i32 {
-    let query = r#"
-    query {
-        rentals(query:"")
-        }
-    "#;
-}
-
-
 async fn answer(bot: Bot, msg: Message, cmd: Command) -> ResponseResult<()> {
     match cmd {
         Command::Help => bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?,
         Command::SalesCount => {
-            bot.send_message(msg.chat.id, format!("SalesCount: {}.", retrieve_sales_count())).await?
+            // bot.send_message(msg.chat.id, format!("SalesCount: {}.", query_sales())).await?
+            todo!()
         }
         Command::RentalsCount => {
-            bot.send_message(msg.chat.id, format!("RentalsCount: {}.", retrieve_rentals_count())).await?
+            // bot.send_message(msg.chat.id, format!("RentalsCount: {}.", retrieve_rentals_count())).await?
+            todo!()
         }
     };
 
