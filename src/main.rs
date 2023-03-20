@@ -43,11 +43,19 @@ struct Counters {
 }
 
 fn retrieve_sales_count() -> i32 {
-    // get salesCount
+    let query = r#"
+    query {
+        sales(query:"")
+        }
+    "#;
 }
 
 fn retrieve_rentals_count() -> i32 {
-    // get rentalsCount
+    let query = r#"
+    query {
+        rentals(query:"")
+        }
+    "#;
 }
 
 
