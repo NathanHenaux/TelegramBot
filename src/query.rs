@@ -28,6 +28,11 @@ pub async fn get_accurate_counters() -> anyhow::Result<Counters>{
   let data = response_body.data.unwrap();
 
   Ok(Counters{ rentals : data.accurate_counters.rentals, sales: data.accurate_counters.sales })
+
+}
+
+fn une_autre_fonction() -> Counters{
+  Counters{ sales: 0, rentals: 1 }
 }
 
 /// This is only a return type !

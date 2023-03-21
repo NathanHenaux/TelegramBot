@@ -1,6 +1,7 @@
 #![allow(unused_imports)]
 use std::fmt::format;
 
+use query::*;
 use teloxide::{prelude::*, utils::command::BotCommands};
 
 mod query;
@@ -30,12 +31,12 @@ async fn answer(bot: Bot, msg: Message, cmd: Command) -> ResponseResult<()> {
     match cmd {
         Command::Help => bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?,
         Command::SalesCount => {
-            // bot.send_message(msg.chat.id, format!("SalesCount: {}.", query_sales())).await?
-            todo!()
+             let counters = get_accurate_counters().await.unwrap();
+            bot.send_message(msg.chat.id, format!("SalesCount: {}.", counters.sales)).await? 
         }
         Command::RentalsCount => {
-            // bot.send_message(msg.chat.id, format!("RentalsCount: {}.", retrieve_rentals_count())).await?
-            todo!()
+            let counters = get_accurate_counters().await.unwrap();
+            bot.send_message(msg.chat.id, format!("RentalsCount: {}.", counters.rentals)).await?
         }
     };
 
