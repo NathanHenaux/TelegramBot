@@ -1,5 +1,7 @@
+use juniper::Variables;
+use reqwest;
 use serde::{Serialize, Deserialize};
-use graphql_client::GraphQLQuery;
+use graphql_client::{GraphQLQuery, Response};
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -7,32 +9,36 @@ use graphql_client::GraphQLQuery;
     query_path = "src/graphql/query.graphql",
     response_derives = "Debug"
 )]
-struct AccurateCounters;
+struct AccurateCountersQuery;
 
 type Size = u32;
 
-// fn main() {
-//     let variables = accurate_counters::Variables {
-//         query_sales: "".to_string(),
-//         query_rentals: "".to_string(),
-//     };
+pub async fn get_accurate_counters() -> anyhow::Result<Counters>{   
+  
+  let variables = accurate_counters_query::Variables {
+    sales_query: "".to_string(),
+    rentals_query: "".to_string(),
+  };
+  let  request_body = AccurateCountersQuery::build_query(variables);
 
-//     let request_body = AccurateCountersQuery::build_query(variables);
+  let client = reqwest::Client::new();
+  let mut res = client.post("https://wymmo.com/graphql").json(&request_body).send().await?;
+  let response_body: Response<accurate_counters_query::ResponseData> = res.json().await?;
 
-//     // Ensuite, vous pouvez envoyer la requête à votre serveur GraphQL comme vous le souhaitez
-// }
+  let data = response_body.data.unwrap();
+
+  Ok(Counters{ rentals : data.accurate_counters.rentals, sales: data.accurate_counters.sales })
+}
 
 
+
+/// This is only a return type !
+/// This is not something to make the graphql query
 #[derive(Debug)]
 pub struct Counters{
     pub sales: u32,
     pub rentals: u32
 }
-
-pub async fn get_accurate_counters() -> anyhow::Result<Counters>{
-    todo!()
-}
-
 
 
 #[cfg(test)]
@@ -53,19 +59,3 @@ mod tests {
   }
 }
 
-
-
-
-// https://github.com/graphql-rust/graphql-client/blob/main/examples/web/src/puppy_smiles.graphql
-
-// query PuppySmiles($after: String) {
-//     reddit {
-//       subreddit(name: "puppysmiles") {
-//         newListings(limit: 6, after: $after) {
-//           title
-//           fullnameId
-//           url
-//         }
-//       }
-//     }
-//   }
