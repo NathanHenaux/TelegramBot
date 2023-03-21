@@ -30,8 +30,6 @@ pub async fn get_accurate_counters() -> anyhow::Result<Counters>{
   Ok(Counters{ rentals : data.accurate_counters.rentals, sales: data.accurate_counters.sales })
 }
 
-
-
 /// This is only a return type !
 /// This is not something to make the graphql query
 #[derive(Debug)]
